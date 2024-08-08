@@ -30,7 +30,7 @@
           .then((response) => response.json())
           .then(response => {
             if (response.data.length > 0) {
-              imgElement.src = response.data[0].images.original.url;
+              search_img.src = response.data[0].images.original.url;
               errorMessage.textContent = "";
             } else {
               errorMessage.textContent = "No GIFs found. Please try a different search term.";
