@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <img src="#" alt="Random Cat GIF" />
+    <img class="img2" src="#" alt="" />
+    <img class="img3" src="#" alt="" />
+    <button>Get New Image</button>
+    <input type="search" class="search_item" />
+    <button class="search">Search Image</button>
+    <p class="error-message" style="color: red"></p>
+    <script>
+      const img1 = document.querySelector("img");
+      const img2 = document.querySelector(".img2");
+      const img3 = document.querySelector(".img3");
+      const button = document.querySelector("button");
+      const API_URL =
+        "https://api.giphy.com/v1/gifs/translate?api_key=IqY4dnlLEs1FILImoTxnixNvzXJq4o52&s=cats";
+      const SEARCH_API_URL =
+        "https://api.giphy.com/v1/gifs/search?api_key=IqY4dnlLEs1FILImoTxnixNvzXJq4o52";
+      const search_btn = document.querySelector(".search");
+      const search_item = document.querySelector(".search_item");
+      const errorMessage = document.querySelector(".error-message");
+
+      const searchImage = (search_img_value, search_img) => {
+        fetch(SEARCH_API_URL + `&q=${search_img_value}`, { mode: "cors" })
+          .then((response) => response.json())
+          .then(response => {
+            if (response.data.length > 0) {
+              imgElement.src = response.data[0].images.original.url;
+              errorMessage.textContent = "";
+            } else {
+              errorMessage.textContent = "No GIFs found. Please try a different search term.";
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching the GIF:", error);
+            errorMessage.textContent = "An error occurred. Please try again.";
+          });
+      };
+
+      const fetchGif = (imgElement) => {
+        fetch(API_URL, { mode: "cors" })
+          .then((response) => response.json())
+          .then((data) => {
+            imgElement.src = data.data.images.original.url;
+          })
+          .catch((error) => console.error("Error fetching the GIF:", error));
+      };
+
+      fetchGif(img1);
+
+      button.addEventListener("click", () => fetchGif(img2));
+      search_btn.addEventListener("click", () => {
+        searchImage(search_item.value, img3);
+      });
+    </script>
+  </body>
+</html>
