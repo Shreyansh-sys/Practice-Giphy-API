@@ -25,31 +25,34 @@
       const search_item = document.querySelector(".search_item");
       const errorMessage = document.querySelector(".error-message");
 
-      const searchImage = (search_img_value, search_img) => {
-        fetch(SEARCH_API_URL + `&q=${search_img_value}`, { mode: "cors" })
-          .then((response) => response.json())
-          .then(response => {
-            if (response.data.length > 0) {
-              search_img.src = response.data[0].images.original.url;
-              errorMessage.textContent = "";
-            } else {
-              errorMessage.textContent = "No GIFs found. Please try a different search term.";
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching the GIF:", error);
-            errorMessage.textContent = "An error occurred. Please try again.";
-          });
-      };
+      async function searchImage(search_img_value, search_img) {
+        const response = await fetch(
+          SEARCH_API_URL + `&q=${search_img_value}`,
+          { mode: "cors" }
+        );
+        const data = await response.json();
+        console.log(data)
+        if (data.data.length > 0) {
+          search_img.src = data.data[0].images.original.url;
+          errorMessage.textContent = "";
+        } else {
+          errorMessage.textContent =
+            "No GIFs found. Please try a different search term.";
+        }
+        // .catch((error) => {
+        //   console.error("Error fetching the GIF:", error);
+        //   errorMessage.textContent = "An error occurred. Please try again.";
+        // });
+      }
 
-      const fetchGif = (imgElement) => {
-        fetch(API_URL, { mode: "cors" })
-          .then((response) => response.json())
-          .then((data) => {
-            imgElement.src = data.data.images.original.url;
-          })
-          .catch((error) => console.error("Error fetching the GIF:", error));
-      };
+      async function fetchGif(imgElement) {
+        const response = await fetch(API_URL, { mode: "cors" });
+        const data = await response.json();
+
+        imgElement.src = data.data.images.original.url;
+
+        // .catch((error) => console.error("Error fetching the GIF:", error));
+      }
 
       fetchGif(img1);
 
